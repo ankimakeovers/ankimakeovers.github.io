@@ -3,7 +3,7 @@
     "id": "nail-001",
     "title": "Chrome French Almond",
     "category": "nails",
-    "price": "$80",
+    "price": "₹1,500",
     "duration": "1h 30m",
     "rating": "4.9 ★★★★★",
     "reviews": "94 reviews",
@@ -17,7 +17,7 @@
     "aftercare": "Hydrate cuticles daily with organic jojoba oil; avoid using nail tips as tools.",
     "images": [
       {
-        "url": "./assets/images/nails/chrome-1.jpg",
+        "url": "./assets/images/nails/nail-1.jpeg",
         "label": "Top View",
         "alt": "Top angle view of chrome nails"
       },
@@ -42,7 +42,7 @@
     "id": "nail-002",
     "title": "Velvet Noir & 24K Flakes",
     "category": "nails",
-    "price": "$110",
+    "price": "₹110",
     "duration": "2h 00m",
     "rating": "5.0 ★★★★★",
     "reviews": "67 reviews",
@@ -56,7 +56,7 @@
     "aftercare": "Reapply cuticle balm every evening; wear gloves when using household cleaning solutions.",
     "images": [
       {
-        "url": "./assets/images/nails/velvet-1.jpg",
+        "url": "./assets/images/nails/nail-2.jpeg",
         "label": "Front View",
         "alt": "Front view of velvet noir nails"
       },
@@ -80,7 +80,7 @@
     "id": "hair-001",
     "title": "Couture Balayage & Silk Waves",
     "category": "hair",
-    "price": "$185",
+    "price": "₹185",
     "duration": "2h 30m",
     "rating": "5.0 ★★★★★",
     "reviews": "128 reviews",
@@ -119,7 +119,7 @@
     "id": "makeup-001",
     "title": "Editorial Glass Skin & Bronze Glam",
     "category": "makeup",
-    "price": "$160",
+    "price": "₹160",
     "duration": "1h 45m",
     "rating": "4.9 ★★★★★",
     "reviews": "82 reviews",
@@ -133,19 +133,53 @@
     "aftercare": "Melt away gently with a cleansing balm or two-phase oil cleanser; avoid scrubbing lash line vigorously.",
     "images": [
       {
-        "url": "./assets/images/makeup/editorial-1.jpg",
+        "url": "./assets/images/makeup/bride-1.jpeg",
         "label": "Front Portrait",
         "alt": "Full front portrait showing luminous skin and bronze eyes"
       },
       {
-        "url": "./assets/images/makeup/editorial-2.jpg",
+        "url": "./assets/images/makeup/bride-2.jpeg",
         "label": "Profile Contouring",
         "alt": "Profile angle showing bone structure and cheekbone glow"
       },
       {
-        "url": "./assets/images/makeup/editorial-3.jpg",
+        "url": "./assets/images/makeup/bride-3.jpeg",
         "label": "Macro Eye Artistry",
         "alt": "Macro detail of feathered brows and precision liner"
+      }
+    ],
+    "addons": [
+      { "name": "Luxe Mink Lash Cluster Customization", "price": 25 },
+      { "name": "24K Gold Under-Eye Prep Patches", "price": 15 },
+      { "name": "Take-Home Touch-Up Luxury Kit", "price": 30 }
+    ]
+  },
+  {
+    "id": "makeup-002",
+    "title": "fancy makup",
+    "category": "makeup",
+    "price": "₹101",
+    "duration": "1h 15m",
+    "rating": "4.9 ★★★★★",
+    "reviews": "82 reviews",
+    "description": "Luminous dewy skin preparation paired with soft bronze sculpted contours, feathered laminated brows, and bespoke silk wispy lashes.",
+    "techniques": [
+      "Lymphatic Facial Sculpting Prep",
+      "Micro-Concealing Precision Layering",
+      "Handcrafted Mink Lash Mapping",
+      "Airbrush Hydro-Setting"
+    ],
+    "aftercare": "Melt away gently with a cleansing balm or two-phase oil cleanser; avoid scrubbing lash line vigorously.",
+    "images": [
+      {
+        "url": "./assets/images/makeup/fan-1.jpeg",
+        "label": "Front Portrait",
+        "alt": "Full front portrait showing luminous skin and bronze eyes"
+      },
+      {
+        "url": "./assets/images/makeup/fan-2.jpeg",
+        "label": "Profile Contouring",
+        "alt": "Profile angle showing bone structure and cheekbone glow"
       }
     ],
     "addons": [

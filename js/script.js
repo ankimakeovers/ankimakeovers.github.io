@@ -1,6 +1,6 @@
 /**
  * ANKI MAKEOVERS — HAUTE ATELIER
- * Modular Dynamic Application Logic, JSON Data Loader, Lookbook Modal & Antigravity Physics
+ * Modular Dynamic Application Logic, JSON Data Loader, Lookbook Modal & WhatsApp Concierge
  * 100% Relative-path compatible for GitHub Pages hosting (e.g. username.github.io/repo-name/)
  */
 
@@ -83,12 +83,7 @@ let activeAngleIndex = 0;
 let currentSelectedAddons = new Set();
 let currentCalculatedTotal = 0;
 
-// Matter.js Antigravity State
-let physicsEngine = null;
-let physicsRender = null;
-let physicsRunner = null;
-let isAntigravityActive = false;
-let preloadedCardImages = {};
+
 
 /* -------------------------------------------------------------------------
    2. DATA NORMALIZATION HELPERS
@@ -103,11 +98,14 @@ function extractNumericPrice(price) {
 }
 
 function formatDisplayPrice(price) {
-  if (typeof price === 'string' && price.trim().startsWith('$')) {
+  if (typeof price === 'string' && price.trim().startsWith('₹')) {
     return price.trim();
   }
+  if (typeof price === 'string' && price.trim().startsWith('$')) {
+    return '₹' + price.trim().slice(1);
+  }
   const numeric = extractNumericPrice(price);
-  return `$${numeric}`;
+  return `₹${numeric.toLocaleString('en-IN')}`;
 }
 
 function normalizePortfolioData(rawList) {
@@ -181,7 +179,7 @@ const FALLBACK_PORTFOLIO_DATA = [
     "id": "nail-001",
     "title": "Chrome French Almond",
     "category": "nails",
-    "price": "$80",
+    "price": "₹1,500",
     "duration": "1h 30m",
     "rating": "4.9 ★★★★★",
     "reviews": "94 reviews",
@@ -195,7 +193,7 @@ const FALLBACK_PORTFOLIO_DATA = [
     "aftercare": "Hydrate cuticles daily with organic jojoba oil; avoid using nail tips as tools.",
     "images": [
       {
-        "url": "./assets/images/nails/chrome-1.jpg",
+        "url": "./assets/images/nails/nail-1.jpeg",
         "label": "Top View",
         "alt": "Top angle view of chrome nails"
       },
@@ -220,7 +218,7 @@ const FALLBACK_PORTFOLIO_DATA = [
     "id": "nail-002",
     "title": "Velvet Noir & 24K Flakes",
     "category": "nails",
-    "price": "$110",
+    "price": "₹110",
     "duration": "2h 00m",
     "rating": "5.0 ★★★★★",
     "reviews": "67 reviews",
@@ -234,7 +232,7 @@ const FALLBACK_PORTFOLIO_DATA = [
     "aftercare": "Reapply cuticle balm every evening; wear gloves when using household cleaning solutions.",
     "images": [
       {
-        "url": "./assets/images/nails/velvet-1.jpg",
+        "url": "./assets/images/nails/nail-2.jpeg",
         "label": "Front View",
         "alt": "Front view of velvet noir nails"
       },
@@ -258,7 +256,7 @@ const FALLBACK_PORTFOLIO_DATA = [
     "id": "hair-001",
     "title": "Couture Balayage & Silk Waves",
     "category": "hair",
-    "price": "$185",
+    "price": "₹185",
     "duration": "2h 30m",
     "rating": "5.0 ★★★★★",
     "reviews": "128 reviews",
@@ -297,7 +295,7 @@ const FALLBACK_PORTFOLIO_DATA = [
     "id": "makeup-001",
     "title": "Editorial Glass Skin & Bronze Glam",
     "category": "makeup",
-    "price": "$160",
+    "price": "₹160",
     "duration": "1h 45m",
     "rating": "4.9 ★★★★★",
     "reviews": "82 reviews",
@@ -374,7 +372,6 @@ async function loadPortfolioData() {
 
     updateCategoryCounters();
     renderPortfolioGrid();
-    preloadImagesForPhysics();
   } else {
     if (skeleton) skeleton.classList.add('hidden');
     if (errorContainer) errorContainer.classList.remove('hidden');
@@ -613,7 +610,7 @@ function renderModalAddons(item) {
         <input type="checkbox" onchange="toggleAddon(${idx}, ${addon.price})" class="w-4 h-4 rounded text-champagne-500 bg-obsidian-900 border-zinc-700 focus:ring-0 cursor-pointer">
         <span>${addon.name}</span>
       </div>
-      <span class="font-serif font-bold text-champagne-400">+$${addon.price}</span>
+      <span class="font-serif font-bold text-champagne-400">+₹${addon.price}</span>
     </label>
   `).join('');
 }
@@ -632,8 +629,9 @@ function toggleAddon(index, price) {
 function updateModalPriceDisplay() {
   const priceEl = document.getElementById('modal-calculated-price');
   const waCtaEl = document.getElementById('modal-whatsapp-cta-text');
-  if (priceEl) priceEl.innerText = `$${currentCalculatedTotal}`;
-  if (waCtaEl) waCtaEl.innerText = `Book / Query on WhatsApp ($${currentCalculatedTotal})`;
+  const formattedTotal = currentCalculatedTotal.toLocaleString('en-IN');
+  if (priceEl) priceEl.innerText = `₹${formattedTotal}`;
+  if (waCtaEl) waCtaEl.innerText = `Book / Query on WhatsApp (₹${formattedTotal})`;
 }
 
 function renderAngleThumbnails(item) {
@@ -711,7 +709,7 @@ function setAngle(idx) {
    ------------------------------------------------------------------------- */
 function formatBookingMessage(item) {
   if (!item) return '';
-  const priceDisplay = currentCalculatedTotal ? `$${currentCalculatedTotal}` : item.price;
+  const priceDisplay = currentCalculatedTotal ? `₹${currentCalculatedTotal.toLocaleString('en-IN')}` : item.price;
   
   let msg = `Hi Anki Makeovers! I want to book an appointment for:\n\n` +
             `• Style: ${item.title}\n` +
@@ -854,338 +852,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 /* -------------------------------------------------------------------------
-   8. "GOOGLE ANTIGRAVITY" MATTER.JS PHYSICS SIMULATION
-   ------------------------------------------------------------------------- */
-function preloadImagesForPhysics() {
-  preloadedCardImages = {};
-  PORTFOLIO_DATA.forEach(item => {
-    const img = new Image();
-    img.src = item.heroImage || FALLBACK_IMAGE;
-    img.onerror = () => {
-      img.onerror = null;
-      img.src = FALLBACK_IMAGE;
-    };
-    preloadedCardImages[item.id] = img;
-  });
-}
-
-function toggleAntigravity(enable) {
-  if (enable) {
-    startAntigravity();
-  } else {
-    stopAntigravity();
-  }
-}
-
-function startAntigravity() {
-  if (isAntigravityActive) return;
-  if (typeof Matter === 'undefined') {
-    console.warn('Matter.js physics engine not loaded.');
-    return;
-  }
-  isAntigravityActive = true;
-
-  const viewport = document.getElementById('antigravity-viewport');
-  if (viewport) viewport.style.display = 'block';
-
-  const container = document.getElementById('matter-canvas-container');
-  if (!container) return;
-  container.innerHTML = '';
-
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
-  const Engine = Matter.Engine,
-        Render = Matter.Render,
-        Runner = Matter.Runner,
-        Bodies = Matter.Bodies,
-        Composite = Matter.Composite,
-        Mouse = Matter.Mouse,
-        MouseConstraint = Matter.MouseConstraint;
-
-  physicsEngine = Engine.create({
-    gravity: {
-      x: 0,
-      y: -0.04, // Gentle upward buoyant drift
-      scale: 0.001
-    }
-  });
-
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  container.appendChild(canvas);
-  const ctx = canvas.getContext('2d');
-
-  // Boundaries
-  const wallThickness = 120;
-  const ground = Bodies.rectangle(width / 2, height + wallThickness / 2, width * 2, wallThickness, { isStatic: true });
-  const ceiling = Bodies.rectangle(width / 2, -wallThickness / 2, width * 2, wallThickness, { isStatic: true });
-  const leftWall = Bodies.rectangle(-wallThickness / 2, height / 2, wallThickness, height * 2, { isStatic: true });
-  const rightWall = Bodies.rectangle(width + wallThickness / 2, height / 2, wallThickness, height * 2, { isStatic: true });
-
-  Composite.add(physicsEngine.world, [ground, ceiling, leftWall, rightWall]);
-
-  const cardWidth = Math.min(260, Math.floor(width * 0.42));
-  const cardHeight = Math.min(180, Math.floor(cardWidth * 0.72));
-
-  // Spawn cards dynamically from fetched PORTFOLIO_DATA
-  const cardBodies = [];
-  const itemsToSpawn = PORTFOLIO_DATA.length > 0 ? PORTFOLIO_DATA : [];
-
-  itemsToSpawn.forEach((item, index) => {
-    const cols = Math.min(3, Math.floor(width / (cardWidth + 40)));
-    const col = index % (cols || 1);
-    const row = Math.floor(index / (cols || 1));
-
-    const startX = (width / (cols + 1)) * (col + 1) + (Math.random() * 40 - 20);
-    const startY = height - 140 - (row * (cardHeight + 40));
-
-    const body = Bodies.rectangle(startX, startY, cardWidth, cardHeight, {
-      restitution: 0.65,
-      frictionAir: 0.025,
-      chamfer: { radius: 16 },
-      label: 'portfolioCard',
-      portfolioId: item.id,
-      portfolioData: item
-    });
-
-    Matter.Body.setVelocity(body, {
-      x: (Math.random() - 0.5) * 4,
-      y: -Math.random() * 6 - 2
-    });
-
-    cardBodies.push(body);
-  });
-
-  Composite.add(physicsEngine.world, cardBodies);
-  spawnCosmeticParticles(8);
-
-  const mouse = Mouse.create(canvas);
-  const mouseConstraint = MouseConstraint.create(physicsEngine, {
-    mouse: mouse,
-    constraint: {
-      stiffness: 0.2,
-      render: { visible: false }
-    }
-  });
-  Composite.add(physicsEngine.world, mouseConstraint);
-
-  let dragStartPos = null;
-  Matter.Events.on(mouseConstraint, 'startdrag', function(event) {
-    dragStartPos = { x: mouse.position.x, y: mouse.position.y };
-  });
-
-  Matter.Events.on(mouseConstraint, 'enddrag', function(event) {
-    if (!dragStartPos) return;
-    const dx = mouse.position.x - dragStartPos.x;
-    const dy = mouse.position.y - dragStartPos.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-
-    if (dist < 8 && event.body && event.body.portfolioId) {
-      openLookbookModal(event.body.portfolioId);
-    }
-  });
-
-  function renderLoop() {
-    if (!isAntigravityActive) return;
-
-    Engine.update(physicsEngine, 1000 / 60);
-
-    ctx.clearRect(0, 0, width, height);
-
-    ctx.fillStyle = 'rgba(7, 7, 9, 0.75)';
-    ctx.fillRect(0, 0, width, height);
-
-    const mx = mouse.position.x;
-    const my = mouse.position.y;
-    const grad = ctx.createRadialGradient(mx, my, 0, mx, my, 180);
-    grad.addColorStop(0, 'rgba(226, 177, 137, 0.1)');
-    grad.addColorStop(1, 'transparent');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, width, height);
-
-    const bodies = Composite.allBodies(physicsEngine.world);
-    bodies.forEach(body => {
-      if (body.isStatic) return;
-
-      ctx.save();
-      ctx.translate(body.position.x, body.position.y);
-      ctx.rotate(body.angle);
-
-      if (body.label === 'portfolioCard') {
-        drawPhysicsCard(ctx, body, cardWidth, cardHeight);
-      } else if (body.label === 'crystal') {
-        drawPhysicsCrystal(ctx, body);
-      } else if (body.label === 'cosmetic') {
-        drawPhysicsCosmetic(ctx, body);
-      }
-
-      ctx.restore();
-    });
-
-    requestAnimationFrame(renderLoop);
-  }
-
-  requestAnimationFrame(renderLoop);
-}
-
-function drawPhysicsCard(ctx, body, w, h) {
-  const item = body.portfolioData;
-  const hw = w / 2;
-  const hh = h / 2;
-
-  ctx.beginPath();
-  roundRect(ctx, -hw, -hh, w, h, 14);
-  ctx.fillStyle = 'rgba(23, 23, 29, 0.95)';
-  ctx.fill();
-
-  ctx.strokeStyle = 'rgba(226, 177, 137, 0.4)';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-
-  const thumbW = 75;
-  const thumbH = h - 16;
-  ctx.save();
-  ctx.beginPath();
-  roundRect(ctx, -hw + 8, -hh + 8, thumbW, thumbH, 10);
-  ctx.clip();
-
-  const img = preloadedCardImages[item.id];
-  if (img && img.complete && img.naturalWidth > 0) {
-    ctx.drawImage(img, -hw + 8, -hh + 8, thumbW, thumbH);
-  } else {
-    ctx.fillStyle = '#17171d';
-    ctx.fillRect(-hw + 8, -hh + 8, thumbW, thumbH);
-  }
-  ctx.restore();
-
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-  ctx.lineWidth = 1;
-  ctx.stroke();
-
-  const textX = -hw + thumbW + 18;
-
-  ctx.fillStyle = '#e2b189';
-  ctx.font = '600 9px "Plus Jakarta Sans", sans-serif';
-  ctx.fillText(item.categoryLabel.toUpperCase(), textX, -hh + 24);
-
-  ctx.fillStyle = '#f4f4f5';
-  ctx.font = '500 13px "Cormorant Garamond", serif';
-  const shortTitle = item.title.length > 18 ? item.title.substring(0, 16) + '...' : item.title;
-  ctx.fillText(shortTitle, textX, -hh + 44);
-
-  ctx.fillStyle = '#f3d5ba';
-  ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
-  ctx.fillText(`${item.price}`, textX, -hh + 66);
-
-  ctx.fillStyle = '#71717a';
-  ctx.font = '9px "Plus Jakarta Sans", sans-serif';
-  const angleText = item.images ? `${item.images.length} Angles • Tap to view` : `Tap to view`;
-  ctx.fillText(angleText, textX, -hh + 86);
-}
-
-function drawPhysicsCrystal(ctx, body) {
-  ctx.beginPath();
-  ctx.arc(0, 0, body.circleRadius || 14, 0, Math.PI * 2);
-  ctx.fillStyle = body.crystalColor || 'rgba(243, 213, 186, 0.8)';
-  ctx.shadowColor = '#e2b189';
-  ctx.shadowBlur = 10;
-  ctx.fill();
-  ctx.strokeStyle = '#ffffff';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-  ctx.shadowBlur = 0;
-}
-
-function drawPhysicsCosmetic(ctx, body) {
-  ctx.fillStyle = '#1a1a24';
-  ctx.fillRect(-8, -14, 16, 28);
-  ctx.strokeStyle = '#e2b189';
-  ctx.lineWidth = 1.2;
-  ctx.strokeRect(-8, -14, 16, 28);
-
-  ctx.fillStyle = '#e2b189';
-  ctx.fillRect(-8, -2, 16, 4);
-
-  ctx.fillStyle = '#d98b77';
-  ctx.beginPath();
-  ctx.moveTo(-6, -14);
-  ctx.lineTo(6, -14);
-  ctx.lineTo(3, -22);
-  ctx.lineTo(-6, -14);
-  ctx.fill();
-}
-
-function spawnCosmeticParticles(count = 5) {
-  if (!physicsEngine || !isAntigravityActive) return;
-
-  const Bodies = Matter.Bodies,
-        Composite = Matter.Composite;
-
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
-  const charms = [];
-  for (let i = 0; i < count; i++) {
-    const x = Math.random() * (width - 100) + 50;
-    const y = Math.random() * 200 + 50;
-
-    if (Math.random() > 0.5) {
-      const crystal = Bodies.circle(x, y, 12 + Math.random() * 6, {
-        restitution: 0.85,
-        frictionAir: 0.02,
-        label: 'crystal',
-        crystalColor: Math.random() > 0.5 ? 'rgba(226, 177, 137, 0.85)' : 'rgba(244, 200, 184, 0.85)'
-      });
-      Matter.Body.setVelocity(crystal, { x: (Math.random() - 0.5) * 5, y: -Math.random() * 4 });
-      charms.push(crystal);
-    } else {
-      const cosmetic = Bodies.rectangle(x, y, 20, 36, {
-        restitution: 0.7,
-        frictionAir: 0.02,
-        chamfer: { radius: 4 },
-        label: 'cosmetic'
-      });
-      Matter.Body.setVelocity(cosmetic, { x: (Math.random() - 0.5) * 5, y: -Math.random() * 4 });
-      charms.push(cosmetic);
-    }
-  }
-
-  Composite.add(physicsEngine.world, charms);
-}
-
-function stopAntigravity() {
-  if (!isAntigravityActive) return;
-  isAntigravityActive = false;
-
-  const viewport = document.getElementById('antigravity-viewport');
-  if (viewport) viewport.style.display = 'none';
-
-  if (physicsEngine) {
-    Matter.Composite.clear(physicsEngine.world, false);
-    Matter.Engine.clear(physicsEngine);
-    physicsEngine = null;
-  }
-
-  const container = document.getElementById('matter-canvas-container');
-  if (container) container.innerHTML = '';
-}
-
-function roundRect(ctx, x, y, width, height, radius) {
-  ctx.moveTo(x + radius, y);
-  ctx.lineTo(x + width - radius, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-  ctx.lineTo(x + width, y + height - radius);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-  ctx.lineTo(x + radius, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-  ctx.lineTo(x, y + radius);
-  ctx.quadraticCurveTo(x, y, x + radius, y);
-}
-
-/* -------------------------------------------------------------------------
-   9. INITIALIZATION ON DOM READY
+   8. INITIALIZATION ON DOM READY
    ------------------------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
   loadPortfolioData();

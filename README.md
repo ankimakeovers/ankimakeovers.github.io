@@ -1,6 +1,6 @@
 # ANKI MAKEOVERS — Haute Beauty & Glamour Studio
 
-A dynamic, high-luxury atelier portfolio web application featuring multi-angle lookbooks, dynamic JSON dataset loading, interactive category filtering, zero-gravity **Google Antigravity** Matter.js physics simulation, and **automated direct WhatsApp booking** (`+91 9241584639`).
+A dynamic, high-luxury atelier portfolio web application featuring multi-angle lookbooks, dynamic JSON dataset loading, interactive category filtering, and **automated direct WhatsApp booking** (`+91 9241584639`).
 
 Engineered for 100% native compatibility with **GitHub Pages** hosting (`https://<username>.github.io/<repository-name>/`).
 
@@ -24,7 +24,7 @@ Engineered for 100% native compatibility with **GitHub Pages** hosting (`https:/
 │       ├── hair/                # Hair styling & cuts photography
 │       └── makeup/              # Makeup & glam photography
 └── js/
-    └── script.js                # Async JSON loader, category filter, Lookbook modal & Matter.js
+    └── script.js                # Async JSON loader, category filter, Lookbook modal & WhatsApp concierge
 ```
 
 ---
@@ -72,7 +72,7 @@ All content is managed through `data/portfolio.json`:
   "id": "nail-003",
   "title": "Rose Quartz Glaze",
   "category": "nails",
-  "price": "$90",
+  "price": "₹1,500",
   "duration": "1h 45m",
   "rating": "5.0 ★★★★★",
   "reviews": "42 reviews",

@@ -81,17 +81,6 @@
   background: rgba(7, 7, 9, 0.85);
 }
 
-/* Antigravity Fullscreen Viewport */
-#antigravity-viewport {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 60;
-  pointer-events: auto;
-  display: none;
-}
 
 /* Touch Pan Optimization */
 .touch-pan-y {

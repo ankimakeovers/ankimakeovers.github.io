@@ -20,8 +20,6 @@
   <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="./logo.jpeg">
 
-  <!-- Matter.js Physics Engine via CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 </head>
 <body class="bg-luxury-radial text-zinc-100 font-sans antialiased min-h-screen selection:bg-champagne-500/30 selection:text-champagne-200 overflow-x-hidden">
 
@@ -54,18 +52,6 @@
 
       <!-- Action Nav Items -->
       <div class="flex items-center space-x-3 sm:space-x-4">
-        <!-- Antigravity Trigger Pill -->
-        <button id="nav-antigravity-btn" onclick="toggleAntigravity(true)" 
-                class="relative group overflow-hidden px-3.5 sm:px-4 py-2 rounded-full border border-champagne-500/30 bg-obsidian-900/90 hover:border-champagne-400 transition-all duration-300 flex items-center space-x-2 text-xs font-medium text-champagne-300 shadow-lg shadow-champagne-950/20 active:scale-95">
-          <span class="absolute inset-0 bg-gradient-to-r from-champagne-500/10 via-rosegold-500/10 to-champagne-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-          <!-- Floating Sparkle Icon -->
-          <svg class="w-4 h-4 text-champagne-400 animate-spin" style="animation-duration: 8s;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-          </svg>
-          <span class="tracking-wide">Defy Gravity</span>
-          <span class="hidden sm:inline-block px-1.5 py-0.5 text-[9px] uppercase tracking-wider rounded bg-champagne-500/20 text-champagne-300 border border-champagne-500/20">Zero-G</span>
-        </button>
-
         <!-- WhatsApp Booking CTA -->
         <button onclick="bookGeneralWhatsApp(this)" class="gold-shimmer-btn text-obsidian-950 font-semibold px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md active:scale-95 flex items-center space-x-1.5">
           <span>Book Visit</span>
@@ -92,7 +78,7 @@
 
     <!-- Subtitle -->
     <p class="mt-6 text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto font-sans font-light leading-relaxed">
-      A sanctuary where architectural nail artistry, couture balayage waves, and bespoke bridal makeup converge. Immerse in our portfolio or release gravity to explore in free-float physics.
+      A sanctuary where architectural nail artistry, couture balayage waves, and bespoke bridal makeup converge. Immerse in our portfolio to discover handcrafted luxury and book appointments directly.
     </p>
 
     <!-- Quick Stats & Accreditations -->
@@ -121,13 +107,8 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
         </svg>
       </a>
-      <button onclick="toggleAntigravity(true)" class="px-7 py-3 rounded-full bg-gradient-to-r from-obsidian-800 via-obsidian-850 to-obsidian-800 border border-champagne-500/40 text-champagne-300 text-xs tracking-widest uppercase font-semibold transition-all hover:scale-105 flex items-center space-x-2.5 shadow-xl shadow-champagne-950/40">
-        <!-- Orbit icon -->
-        <svg class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9" stroke-dasharray="2 3" stroke-width="1.8"/>
-          <circle cx="12" cy="12" r="3" fill="currentColor"/>
-        </svg>
-        <span>Launch Antigravity Mode</span>
+      <button onclick="bookGeneralWhatsApp(this)" class="gold-shimmer-btn text-obsidian-950 px-7 py-3 rounded-full text-xs tracking-widest uppercase font-semibold transition-all shadow-xl active:scale-95 flex items-center space-x-2">
+        <span>Book Appointment</span>
       </button>
     </div>
   </section>
@@ -158,7 +139,7 @@
         </button>
       </div>
 
-      <!-- Quick Indicator / Zero-G Hint -->
+      <!-- Quick Indicator / Multi-Angle Hint -->
       <div class="hidden lg:flex items-center space-x-4 text-xs text-zinc-400">
         <span class="flex items-center space-x-1.5">
           <svg class="w-3.5 h-3.5 text-champagne-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -288,7 +269,6 @@
 
       <div class="flex items-center space-x-6 text-zinc-400">
         <a href="#gallery-section" class="hover:text-champagne-300 transition-colors">Lookbook</a>
-        <button onclick="toggleAntigravity(true)" class="hover:text-champagne-300 transition-colors">Antigravity Mode</button>
         <button onclick="bookGeneralWhatsApp(this)" class="hover:text-champagne-300 transition-colors">Book on WhatsApp</button>
       </div>
 
@@ -299,20 +279,14 @@
   </footer>
 
   <!-- STICKY MOBILE BOTTOM BAR -->
-  <div class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-obsidian-950/95 backdrop-blur-xl border-t border-champagne-500/20 px-4 py-3 flex items-center justify-between shadow-2xl">
-    <button onclick="toggleAntigravity(true)" class="flex flex-col items-center justify-center text-champagne-400 text-[10px] uppercase tracking-wider font-semibold active:scale-95">
-      <svg class="w-5 h-5 mb-0.5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-      </svg>
-      <span>Zero-G</span>
-    </button>
+  <div class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-obsidian-950/95 backdrop-blur-xl border-t border-champagne-500/20 px-4 py-3 flex items-center justify-around shadow-2xl">
     <a href="#gallery-section" class="flex flex-col items-center justify-center text-zinc-400 hover:text-champagne-300 text-[10px] uppercase tracking-wider font-medium">
       <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
       </svg>
-      <span>Looks</span>
+      <span>Browse Looks</span>
     </a>
-    <button onclick="bookGeneralWhatsApp(this)" class="gold-shimmer-btn text-obsidian-950 px-5 py-2 rounded-full font-bold text-xs uppercase tracking-wider shadow-lg">
+    <button onclick="bookGeneralWhatsApp(this)" class="gold-shimmer-btn text-obsidian-950 px-6 py-2 rounded-full font-bold text-xs uppercase tracking-wider shadow-lg">
       Book on WhatsApp
     </button>
   </div>
@@ -397,7 +371,7 @@
           <!-- Duration & Pricing Header -->
           <div class="flex items-baseline space-x-3 mb-6 pb-4 border-b border-white/10">
             <div class="text-3xl font-serif font-semibold text-champagne-300" id="modal-calculated-price">
-              $95
+              ₹1,500
             </div>
             <div class="text-xs text-zinc-400 flex items-center space-x-1">
               <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -459,7 +433,7 @@
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
               <path d="M12.031 2c-5.508 0-9.986 4.477-9.986 9.984 0 1.76.459 3.479 1.332 4.996L2 22l5.195-1.362a9.927 9.927 0 0 0 4.836 1.258h.004c5.507 0 9.986-4.477 9.986-9.984 0-2.668-1.039-5.176-2.926-7.062A9.925 9.925 0 0 0 12.031 2zm5.828 14.184c-.246.691-1.426 1.328-1.969 1.41-.5.076-1.145.107-3.471-.856-2.502-1.036-4.108-3.568-4.233-3.734-.125-.166-1.004-1.336-1.004-2.547 0-1.211.637-1.809.863-2.055.227-.246.496-.309.66-.309.164 0 .328.002.473.008.152.008.355-.059.555.422.207.496.707 1.723.769 1.848.062.125.104.271.021.438-.082.166-.125.27-.248.416-.123.146-.26.326-.371.438-.125.125-.256.26-.11.512.146.252.648 1.066 1.391 1.727.955.85 1.76 1.113 2.012 1.238.252.125.4.104.547-.066.146-.17.625-.729.791-.98.166-.252.332-.209.557-.125.227.084 1.436.678 1.684.803.248.125.414.188.475.293.062.105.062.609-.184 1.3z"/>
             </svg>
-            <span id="modal-whatsapp-cta-text">Book / Query on WhatsApp ($80)</span>
+            <span id="modal-whatsapp-cta-text">Book / Query on WhatsApp (₹1,500)</span>
           </button>
           <p class="text-[11px] text-zinc-500 text-center mt-2.5 font-light">
             Auto-copies inquiry details to clipboard and opens concierge chat.
@@ -473,46 +447,7 @@
   </div>
 
 
-  <!-- ========================================================================= -->
-  <!-- "GOOGLE ANTIGRAVITY" / ZERO-GRAVITY MATTER.JS PHYSICS VIEWPORT -->
-  <!-- ========================================================================= -->
-  <div id="antigravity-viewport">
-    
-    <!-- Persistent HUD Header -->
-    <div class="absolute top-0 left-0 right-0 z-50 p-4 sm:p-6 flex flex-wrap items-center justify-between gap-4 bg-gradient-to-b from-obsidian-950/95 via-obsidian-950/60 to-transparent pointer-events-none">
-      
-      <!-- Studio Zero-G Title & Status -->
-      <div class="pointer-events-auto flex items-center space-x-3 bg-obsidian-900/90 backdrop-blur-md px-4 py-2 rounded-full border border-champagne-500/30 shadow-2xl">
-        <span class="w-2.5 h-2.5 rounded-full bg-champagne-400 animate-ping"></span>
-        <span class="font-serif text-sm sm:text-base font-bold text-champagne-300">ANKI ZERO-GRAVITY MODE</span>
-        <span class="text-xs text-zinc-400 hidden sm:inline">• Drag, fling or tap any look</span>
-      </div>
 
-      <!-- Controls & Restore Button -->
-      <div class="pointer-events-auto flex items-center space-x-3">
-        <!-- Spawn Charms / Crystals Button -->
-        <button onclick="spawnCosmeticParticles(5)" class="px-3.5 py-2 rounded-full bg-obsidian-900/90 hover:bg-obsidian-850 border border-white/10 hover:border-champagne-400 text-xs text-champagne-200 flex items-center space-x-1.5 transition-all shadow-lg active:scale-95">
-          <svg class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-          </svg>
-          <span class="hidden sm:inline">Add Crystals & Charms</span>
-          <span class="sm:hidden">+Charms</span>
-        </button>
-
-        <!-- Restore Gravity Button -->
-        <button onclick="toggleAntigravity(false)" class="gold-shimmer-btn px-4 sm:px-6 py-2 rounded-full text-obsidian-950 font-bold text-xs uppercase tracking-wider flex items-center space-x-2 shadow-2xl active:scale-95">
-          <svg class="w-4 h-4 text-obsidian-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
-          <span>Restore Gravity</span>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- Physics Canvas injected by Matter.js -->
-    <div id="matter-canvas-container" class="w-full h-full"></div>
-  </div>
 
 
 
