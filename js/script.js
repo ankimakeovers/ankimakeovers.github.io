@@ -67,8 +67,8 @@ if (typeof tailwind !== 'undefined') {
    ------------------------------------------------------------------------- */
 const FALLBACK_IMAGE = './assets/images/placeholder.svg';
 
-// Studio WhatsApp Concierge Number (Digits only, including country code, e.g. '15550192834' or '919876543210')
-const WHATSAPP_PHONE = '15550192834';
+// Studio WhatsApp Concierge Number (Digits only, including country code)
+const WHATSAPP_PHONE = '919241584639';
 
 const CATEGORY_MAP = {
   nails: { label: "Nails & Art", key: "nails" },
@@ -706,24 +706,18 @@ function setAngle(idx) {
   updateModalActiveAngle();
 }
 
-function bookFromModal() {
-  if (!activeModalItem) return;
-  closeLookbookModal();
-  openBookingDrawer(activeModalItem, currentCalculatedTotal);
-}
-
 /* -------------------------------------------------------------------------
-   6.5 AUTOMATED WHATSAPP BOOKING & CLIPBOARD COPY
+   7. AUTOMATED WHATSAPP DIRECT BOOKING & CLIPBOARD AUTO-COPY
    ------------------------------------------------------------------------- */
 function formatBookingMessage(item) {
   if (!item) return '';
   const priceDisplay = currentCalculatedTotal ? `$${currentCalculatedTotal}` : item.price;
   
-  let msg = `Hi! I'm interested in booking an appointment for this look:\n\n` +
+  let msg = `Hi Anki Makeovers! I want to book an appointment for:\n\n` +
             `• Style: ${item.title}\n` +
-            `• Code / ID: ${item.id}\n` +
+            `• Code: ${item.id}\n` +
             `• Category: ${item.categoryLabel}\n` +
-            `• Estimated Price: ${priceDisplay}\n`;
+            `• Price: ${priceDisplay}\n`;
 
   if (currentSelectedAddons && currentSelectedAddons.size > 0 && item.addons) {
     const selectedNames = Array.from(currentSelectedAddons)
@@ -734,63 +728,81 @@ function formatBookingMessage(item) {
     }
   }
 
-  msg += `\nCould you please let me know your available slots?`;
+  msg += `\nCould you please share your upcoming availability?`;
   return msg;
 }
 
-function bookViaWhatsApp() {
+function bookViaWhatsApp(btnElement = null) {
   if (!activeModalItem) return;
   const message = formatBookingMessage(activeModalItem);
   const encoded = encodeURIComponent(message);
-  
-  const cleanPhone = (WHATSAPP_PHONE || '').replace(/[^0-9]/g, '');
-  const url = cleanPhone.length > 0 
-    ? `https://wa.me/${cleanPhone}?text=${encoded}`
-    : `https://wa.me/?text=${encoded}`;
-  
+  const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encoded}`;
+
+  // 1. Auto-copy text to clipboard
+  copyTextToClipboard(message);
+
+  // 2. Button visual feedback
+  const ctaText = document.getElementById('modal-whatsapp-cta-text');
+  const originalText = ctaText ? ctaText.innerText : null;
+  if (ctaText) ctaText.innerText = 'Opening WhatsApp... 💬';
+  if (btnElement) btnElement.classList.add('scale-95');
+
+  // 3. Toast confirmation
+  const toastTitle = document.getElementById('toast-title');
+  const toastMsg = document.getElementById('toast-message');
+  if (toastTitle) toastTitle.innerText = 'Connecting to WhatsApp...';
+  if (toastMsg) toastMsg.innerText = 'Inquiry details copied to clipboard & chat is opening!';
+  showToast();
+
+  setTimeout(() => {
+    if (ctaText && originalText) ctaText.innerText = originalText;
+    if (btnElement) btnElement.classList.remove('scale-95');
+  }, 2000);
+
+  // 4. Open WhatsApp directly
   window.open(url, '_blank', 'noopener,noreferrer');
 }
 
-function copyBookingMessage() {
-  if (!activeModalItem) return;
-  const message = formatBookingMessage(activeModalItem);
-  
-  const copyBtnText = document.getElementById('copy-btn-text');
-  const copyBtnIcon = document.getElementById('copy-btn-icon');
+function bookGeneralWhatsApp(btnElement = null) {
+  const message = `Hi Anki Makeovers! I'd like to inquire about booking an appointment. Could you please share your available dates and services?`;
+  const encoded = encodeURIComponent(message);
+  const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encoded}`;
 
-  function triggerCopySuccess() {
-    if (copyBtnText) copyBtnText.innerText = 'Copied to Clipboard! ✓';
-    if (copyBtnIcon) {
-      copyBtnIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>`;
-    }
-    
-    // Show Toast
-    const toastTitle = document.getElementById('toast-title');
-    const toastMsg = document.getElementById('toast-message');
-    const toastCode = document.getElementById('toast-code');
-    if (toastTitle) toastTitle.innerText = 'Inquiry Details Copied!';
-    if (toastMsg) toastMsg.innerHTML = 'Message copied to your clipboard. Ready to paste in WhatsApp, Instagram DM, or iMessage.';
-    if (toastCode) toastCode.innerText = activeModalItem.id;
-    showToast();
+  // 1. Auto-copy general inquiry text
+  copyTextToClipboard(message);
 
+  // 2. Button visual feedback
+  let originalText = null;
+  if (btnElement) {
+    originalText = btnElement.innerText;
+    btnElement.innerText = 'Opening WhatsApp... 💬';
+    btnElement.classList.add('scale-95');
     setTimeout(() => {
-      if (copyBtnText) copyBtnText.innerText = 'Copy Inquiry Details';
-      if (copyBtnIcon) {
-        copyBtnIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>`;
-      }
-    }, 2500);
+      btnElement.innerText = originalText;
+      btnElement.classList.remove('scale-95');
+    }, 2000);
   }
 
+  // 3. Toast confirmation
+  const toastTitle = document.getElementById('toast-title');
+  const toastMsg = document.getElementById('toast-message');
+  if (toastTitle) toastTitle.innerText = 'Connecting to WhatsApp...';
+  if (toastMsg) toastMsg.innerText = 'General inquiry text copied to clipboard & chat is opening!';
+  showToast();
+
+  // 4. Open WhatsApp directly
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function copyTextToClipboard(text) {
   if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(message)
-      .then(triggerCopySuccess)
-      .catch(() => fallbackCopy(message, triggerCopySuccess));
+    navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
   } else {
-    fallbackCopy(message, triggerCopySuccess);
+    fallbackCopy(text);
   }
 }
 
-function fallbackCopy(text, callback) {
+function fallbackCopy(text) {
   const textarea = document.createElement('textarea');
   textarea.value = text;
   textarea.style.position = 'fixed';
@@ -799,100 +811,10 @@ function fallbackCopy(text, callback) {
   textarea.select();
   try {
     document.execCommand('copy');
-    if (typeof callback === 'function') callback();
   } catch (err) {
     console.error('Failed to copy text:', err);
   } finally {
     document.body.removeChild(textarea);
-  }
-}
-
-/* -------------------------------------------------------------------------
-   7. BOOKING INQUIRY DRAWER LOGIC
-   ------------------------------------------------------------------------- */
-function openBookingDrawer(selectedItem = null, customTotal = null) {
-  const drawer = document.getElementById('booking-drawer');
-  const panel = document.getElementById('drawer-panel');
-  if (!drawer || !panel) return;
-
-  const item = selectedItem || PORTFOLIO_DATA[0] || {
-    title: "Bespoke Consultation",
-    heroImage: FALLBACK_IMAGE,
-    startingPrice: 80,
-    duration: "1h 30m"
-  };
-
-  const price = customTotal !== null ? customTotal : (item.startingPrice || 80);
-
-  const thumbEl = document.getElementById('drawer-style-thumb');
-  const titleEl = document.getElementById('drawer-style-title');
-  const priceEl = document.getElementById('drawer-style-price');
-  
-  if (thumbEl) {
-    thumbEl.onerror = () => {
-      thumbEl.onerror = null;
-      thumbEl.src = FALLBACK_IMAGE;
-    };
-    thumbEl.src = item.heroImage || item.images?.[0]?.url || FALLBACK_IMAGE;
-  }
-  if (titleEl) titleEl.innerText = item.title;
-  if (priceEl) priceEl.innerText = `Estimated Total: $${price} (${item.duration})`;
-
-  const dateInput = document.getElementById('client-date');
-  if (dateInput) {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    dateInput.min = new Date().toISOString().split("T")[0];
-    dateInput.value = tomorrow.toISOString().split("T")[0];
-  }
-
-  drawer.classList.remove('hidden');
-  setTimeout(() => {
-    drawer.classList.remove('opacity-0');
-    panel.classList.remove('translate-x-full');
-  }, 10);
-
-  document.body.style.overflow = 'hidden';
-}
-
-function closeBookingDrawer() {
-  const drawer = document.getElementById('booking-drawer');
-  const panel = document.getElementById('drawer-panel');
-  if (!drawer || !panel) return;
-
-  drawer.classList.add('opacity-0');
-  panel.classList.add('translate-x-full');
-
-  setTimeout(() => {
-    drawer.classList.add('hidden');
-    document.body.style.overflow = '';
-  }, 300);
-}
-
-function handleBookingSubmit(e) {
-  e.preventDefault();
-  const nameInput = document.getElementById('client-name');
-  const dateInput = document.getElementById('client-date');
-  const timeInput = document.getElementById('client-time');
-
-  const name = nameInput ? nameInput.value : 'Guest';
-  const date = dateInput ? dateInput.value : 'Selected Date';
-  const time = timeInput ? timeInput.value : 'Selected Time';
-
-  closeBookingDrawer();
-
-  const code = '#ANKI-' + Math.floor(1000 + Math.random() * 9000);
-  const toastTitle = document.getElementById('toast-title');
-  const toastMsg = document.getElementById('toast-message');
-  const toastCode = document.getElementById('toast-code');
-
-  if (toastTitle) toastTitle.innerText = `Reservation Confirmed, ${name.split(' ')[0]}!`;
-  if (toastMsg) toastMsg.innerHTML = `Your consultation is scheduled for <span class="text-zinc-100 font-medium">${date} at ${time}</span>.`;
-  if (toastCode) toastCode.innerText = code;
-
-  showToast();
-  if (e.target && typeof e.target.reset === 'function') {
-    e.target.reset();
   }
 }
 
@@ -904,7 +826,7 @@ function showToast() {
 
   setTimeout(() => {
     hideToast();
-  }, 6000);
+  }, 4000);
 }
 
 function hideToast() {
@@ -918,7 +840,6 @@ function hideToast() {
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeLookbookModal();
-    closeBookingDrawer();
   } else if (e.key === 'ArrowRight') {
     const modal = document.getElementById('lookbook-modal');
     if (modal && !modal.classList.contains('hidden')) {

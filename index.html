@@ -63,9 +63,9 @@
           <span class="hidden sm:inline-block px-1.5 py-0.5 text-[9px] uppercase tracking-wider rounded bg-champagne-500/20 text-champagne-300 border border-champagne-500/20">Zero-G</span>
         </button>
 
-        <!-- Book Consultation CTA -->
-        <button onclick="openBookingDrawer()" class="gold-shimmer-btn text-obsidian-950 font-semibold px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md active:scale-95">
-          Book Visit
+        <!-- WhatsApp Booking CTA -->
+        <button onclick="bookGeneralWhatsApp(this)" class="gold-shimmer-btn text-obsidian-950 font-semibold px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md active:scale-95 flex items-center space-x-1.5">
+          <span>Book Visit</span>
         </button>
       </div>
 
@@ -283,7 +283,7 @@
       <div class="flex items-center space-x-6 text-zinc-400">
         <a href="#gallery-section" class="hover:text-champagne-300 transition-colors">Lookbook</a>
         <button onclick="toggleAntigravity(true)" class="hover:text-champagne-300 transition-colors">Antigravity Mode</button>
-        <button onclick="openBookingDrawer()" class="hover:text-champagne-300 transition-colors">Consultations</button>
+        <button onclick="bookGeneralWhatsApp(this)" class="hover:text-champagne-300 transition-colors">Book on WhatsApp</button>
       </div>
 
       <div class="text-zinc-600">
@@ -306,8 +306,8 @@
       </svg>
       <span>Looks</span>
     </a>
-    <button onclick="openBookingDrawer()" class="gold-shimmer-btn text-obsidian-950 px-5 py-2 rounded-full font-bold text-xs uppercase tracking-wider shadow-lg">
-      Book Appointment
+    <button onclick="bookGeneralWhatsApp(this)" class="gold-shimmer-btn text-obsidian-950 px-5 py-2 rounded-full font-bold text-xs uppercase tracking-wider shadow-lg">
+      Book on WhatsApp
     </button>
   </div>
 
@@ -445,40 +445,19 @@
 
         </div>
 
-        <!-- Sticky Action Buttons Area -->
-        <div class="pt-5 border-t border-white/10 space-y-3">
-          
-          <!-- Primary: Automated WhatsApp Booking Button -->
-          <button id="modal-whatsapp-btn" onclick="bookViaWhatsApp()" 
-                  class="w-full whatsapp-btn py-3.5 px-4 rounded-xl font-bold text-white text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center space-x-2.5 shadow-xl active:scale-98 cursor-pointer">
+        <!-- Single Primary Action Button: WhatsApp Direct Booking -->
+        <div class="pt-5 border-t border-white/10">
+          <button id="modal-whatsapp-btn" onclick="bookViaWhatsApp(this)" 
+                  class="w-full whatsapp-btn py-4 px-6 rounded-2xl font-bold text-white text-xs sm:text-sm uppercase tracking-widest flex items-center justify-center space-x-2.5 shadow-xl active:scale-98 cursor-pointer transition-all">
             <!-- WhatsApp SVG Icon -->
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
               <path d="M12.031 2c-5.508 0-9.986 4.477-9.986 9.984 0 1.76.459 3.479 1.332 4.996L2 22l5.195-1.362a9.927 9.927 0 0 0 4.836 1.258h.004c5.507 0 9.986-4.477 9.986-9.984 0-2.668-1.039-5.176-2.926-7.062A9.925 9.925 0 0 0 12.031 2zm5.828 14.184c-.246.691-1.426 1.328-1.969 1.41-.5.076-1.145.107-3.471-.856-2.502-1.036-4.108-3.568-4.233-3.734-.125-.166-1.004-1.336-1.004-2.547 0-1.211.637-1.809.863-2.055.227-.246.496-.309.66-.309.164 0 .328.002.473.008.152.008.355-.059.555.422.207.496.707 1.723.769 1.848.062.125.104.271.021.438-.082.166-.125.27-.248.416-.123.146-.26.326-.371.438-.125.125-.256.26-.11.512.146.252.648 1.066 1.391 1.727.955.85 1.76 1.113 2.012 1.238.252.125.4.104.547-.066.146-.17.625-.729.791-.98.166-.252.332-.209.557-.125.227.084 1.436.678 1.684.803.248.125.414.188.475.293.062.105.062.609-.184 1.3z"/>
             </svg>
             <span id="modal-whatsapp-cta-text">Book / Query on WhatsApp ($80)</span>
           </button>
-
-          <!-- Secondary Actions Row: Copy Text & In-House Form -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <!-- Copy Inquiry Message Button -->
-            <button id="modal-copy-btn" onclick="copyBookingMessage()" 
-                    class="w-full py-2.5 px-3.5 rounded-xl border border-white/10 hover:border-champagne-500/40 bg-obsidian-950/80 hover:bg-obsidian-950 text-zinc-300 hover:text-champagne-300 text-xs font-medium flex items-center justify-center space-x-2 transition-all active:scale-95 shadow-md">
-              <svg id="copy-btn-icon" class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
-              </svg>
-              <span id="copy-btn-text">Copy Inquiry Details</span>
-            </button>
-
-            <!-- Open Reservation Form Drawer -->
-            <button onclick="bookFromModal()" 
-                    class="w-full py-2.5 px-3.5 rounded-xl border border-champagne-500/20 hover:border-champagne-400/60 bg-champagne-500/10 hover:bg-champagne-500/20 text-champagne-300 text-xs font-medium flex items-center justify-center space-x-1.5 transition-all active:scale-95 shadow-md">
-              <svg class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-              </svg>
-              <span>Schedule Form Visit</span>
-            </button>
-          </div>
-
+          <p class="text-[11px] text-zinc-500 text-center mt-2.5 font-light">
+            Auto-copies inquiry details to clipboard and opens concierge chat.
+          </p>
         </div>
 
       </div>
@@ -530,114 +509,7 @@
   </div>
 
 
-  <!-- ========================================================================= -->
-  <!-- BOOKING INQUIRY DRAWER / MODAL -->
-  <!-- ========================================================================= -->
-  <div id="booking-drawer" class="fixed inset-0 z-50 modal-backdrop hidden overflow-y-auto flex items-center justify-end transition-all duration-300 opacity-0">
-    
-    <!-- Drawer Panel -->
-    <div id="drawer-panel" class="relative w-full max-w-lg bg-obsidian-900 border-l border-champagne-500/25 h-full min-h-screen p-6 sm:p-8 flex flex-col justify-between transform translate-x-full transition-transform duration-300 overflow-y-auto">
-      
-      <div>
-        <!-- Close Drawer Button -->
-        <div class="flex items-center justify-between pb-6 border-b border-white/10 mb-6">
-          <div>
-            <span class="text-xs uppercase tracking-[0.2em] text-champagne-400 font-semibold block mb-1">Couture Reservation</span>
-            <h3 class="text-2xl font-serif text-zinc-100">Schedule Your Atelier Visit</h3>
-          </div>
-          <button onclick="closeBookingDrawer()" class="w-9 h-9 rounded-full bg-obsidian-950 border border-white/10 text-zinc-400 hover:text-white flex items-center justify-center transition-all" aria-label="Close booking drawer">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
 
-        <!-- Selected Style Preview Card -->
-        <div class="mb-6 p-4 rounded-xl bg-obsidian-950 border border-champagne-500/20 flex items-center space-x-3.5">
-          <img id="drawer-style-thumb" src="./assets/images/nails/chrome-1.jpg" onerror="this.onerror=null; this.src='./assets/images/placeholder.svg';" alt="Style preview" class="w-14 h-14 rounded-lg object-cover border border-champagne-500/30">
-          <div>
-            <span class="text-[10px] uppercase tracking-wider text-champagne-400 font-medium block">Chosen Experience</span>
-            <h4 id="drawer-style-title" class="text-base font-serif text-zinc-100">Chrome French Almond</h4>
-            <span id="drawer-style-price" class="text-xs text-champagne-300 font-semibold">Total: $80</span>
-          </div>
-        </div>
-
-        <!-- Booking Form -->
-        <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-4">
-          
-          <div>
-            <label class="block text-xs uppercase tracking-wider font-semibold text-zinc-400 mb-1.5" for="client-name">
-              Full Name *
-            </label>
-            <input type="text" id="client-name" required placeholder="e.g. Lady Genevieve Vance" 
-                   class="w-full px-4 py-3 rounded-xl bg-obsidian-950 border border-white/10 focus:border-champagne-400 focus:outline-none text-zinc-100 text-sm placeholder-zinc-600 transition-colors">
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs uppercase tracking-wider font-semibold text-zinc-400 mb-1.5" for="client-phone">
-                Phone / WhatsApp *
-              </label>
-              <input type="tel" id="client-phone" required placeholder="+1 (555) 019-2834" 
-                     class="w-full px-4 py-3 rounded-xl bg-obsidian-950 border border-white/10 focus:border-champagne-400 focus:outline-none text-zinc-100 text-sm placeholder-zinc-600 transition-colors">
-            </div>
-            <div>
-              <label class="block text-xs uppercase tracking-wider font-semibold text-zinc-400 mb-1.5" for="client-email">
-                Email Address
-              </label>
-              <input type="email" id="client-email" placeholder="vance@couture.com" 
-                     class="w-full px-4 py-3 rounded-xl bg-obsidian-950 border border-white/10 focus:border-champagne-400 focus:outline-none text-zinc-100 text-sm placeholder-zinc-600 transition-colors">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs uppercase tracking-wider font-semibold text-zinc-400 mb-1.5" for="client-date">
-                Preferred Date *
-              </label>
-              <input type="date" id="client-date" required 
-                     class="w-full px-4 py-3 rounded-xl bg-obsidian-950 border border-white/10 focus:border-champagne-400 focus:outline-none text-zinc-100 text-sm transition-colors">
-            </div>
-            <div>
-              <label class="block text-xs uppercase tracking-wider font-semibold text-zinc-400 mb-1.5" for="client-time">
-                Preferred Slot *
-              </label>
-              <select id="client-time" required class="w-full px-4 py-3 rounded-xl bg-obsidian-950 border border-white/10 focus:border-champagne-400 focus:outline-none text-zinc-100 text-sm transition-colors">
-                <option value="10:00 AM">10:00 AM (Morning Glow)</option>
-                <option value="01:00 PM">01:00 PM (Afternoon Sun)</option>
-                <option value="04:30 PM">04:30 PM (Golden Hour)</option>
-                <option value="07:00 PM">07:00 PM (Evening VIP)</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs uppercase tracking-wider font-semibold text-zinc-400 mb-1.5" for="client-notes">
-              Special Notes / Inspirations
-            </label>
-            <textarea id="client-notes" rows="3" placeholder="Tell us if this is for a wedding, photoshoot, or custom color nuance..." 
-                      class="w-full px-4 py-3 rounded-xl bg-obsidian-950 border border-white/10 focus:border-champagne-400 focus:outline-none text-zinc-100 text-sm placeholder-zinc-600 transition-colors"></textarea>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="pt-4">
-            <button type="submit" class="w-full gold-shimmer-btn py-4 rounded-xl font-bold text-obsidian-950 text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-xl active:scale-98">
-              <span>Confirm Atelier Reservation</span>
-              <svg class="w-4 h-4 text-obsidian-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-              </svg>
-            </button>
-            <p class="text-[11px] text-zinc-500 text-center mt-3 font-light">
-              No immediate charge. Our concierge will confirm within 2 hours.
-            </p>
-          </div>
-
-        </form>
-      </div>
-
-    </div>
-
-  </div>
 
 
   <!-- ========================================================================= -->
