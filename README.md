@@ -1,6 +1,6 @@
 # ANKI MAKEOVERS — Haute Beauty & Glamour Studio
 
-A dynamic, high-luxury atelier portfolio web application featuring multi-angle lookbooks, dynamic JSON dataset loading, interactive category filtering, and a zero-gravity **Google Antigravity** Matter.js physics simulation.
+A dynamic, high-luxury atelier portfolio web application featuring multi-angle lookbooks, dynamic JSON dataset loading, interactive category filtering, zero-gravity **Google Antigravity** Matter.js physics simulation, and **automated direct WhatsApp booking** (`+91 9241584639`).
 
 Engineered for 100% native compatibility with **GitHub Pages** hosting (`https://<username>.github.io/<repository-name>/`).
 
