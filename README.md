@@ -15,16 +15,9 @@ Engineered for 100% native compatibility with **GitHub Pages** hosting (`https:/
 ├── style.css                    # Luxury glassmorphism, gold gradients & theme
 ├── .nojekyll                    # Tells GitHub Pages to bypass Jekyll and serve static files
 ├── .gitignore                   # Ignores OS & IDE artifacts
-├── data/
-│   └── portfolio.json           # All portfolio items, multiple angles, pricing & details
-├── assets/
-│   └── images/                  # Categorized local photography angles
-│       ├── placeholder.svg      # Graceful fallback if an image isn't uploaded yet
-│       ├── nails/               # Nails & art photography
-│       ├── hair/                # Hair styling & cuts photography
-│       └── makeup/              # Makeup & glam photography
+├── assets/                      # Atelier brand assets
 └── js/
-    └── script.js                # Async JSON loader, category filter, Lookbook modal & WhatsApp concierge
+    └── script.js                # Real-time GitHub API data loader, Lookbook modal & WhatsApp concierge
 ```
 
 ---
@@ -60,12 +53,14 @@ https://<YOUR-USERNAME>.github.io/<YOUR-REPO-NAME>/
 
 ---
 
-## 💎 How to Add New Portfolio Looks
+## 💎 Real-time Products Data Source
 
-All content is managed through `data/portfolio.json`:
+All product content and lookbook angles are loaded in real-time on page load from the `ankimakeovers/images` repository via GitHub Contents API:
+```text
+https://api.github.com/repos/ankimakeovers/images/contents/products.json
+```
 
-1. **Add Photos**: Place your photos in `assets/images/<category>/` (e.g., `assets/images/nails/my-style-1.jpg`).
-2. **Add Entry**: Open `data/portfolio.json` and insert a new object into the list:
+To add or update looks, update `products.json` in the `ankimakeovers/images` repository:
 
 ```json
 {
@@ -85,12 +80,12 @@ All content is managed through `data/portfolio.json`:
   "aftercare": "Hydrate cuticles twice daily; avoid using nail tips as tools.",
   "images": [
     {
-      "url": "./assets/images/nails/my-style-1.jpg",
+      "url": "https://cdn.jsdelivr.net/gh/ankimakeovers/images@main/image/style-1.jpg",
       "label": "Top View",
       "alt": "Top angle of rose quartz nails"
     },
     {
-      "url": "./assets/images/nails/my-style-2.jpg",
+      "url": "https://cdn.jsdelivr.net/gh/ankimakeovers/images@main/image/style-2.jpg",
       "label": "Side Contour",
       "alt": "Side apex profile"
     }
