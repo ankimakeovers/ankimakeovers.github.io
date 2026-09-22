@@ -65,7 +65,7 @@ if (typeof tailwind !== 'undefined') {
 /* -------------------------------------------------------------------------
    1. GLOBAL STATE & CONSTANTS
    ------------------------------------------------------------------------- */
-const FALLBACK_IMAGE = './assets/images/placeholder.svg';
+const FALLBACK_IMAGE = './logo.jpeg';
 
 // Studio WhatsApp Concierge Number (Digits only, including country code)
 const WHATSAPP_PHONE = '919241584639';
