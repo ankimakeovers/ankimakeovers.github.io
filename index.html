@@ -445,14 +445,40 @@
 
         </div>
 
-        <!-- Sticky Action Button -->
-        <div class="pt-4 border-t border-white/10">
-          <button id="modal-book-btn" onclick="bookFromModal()" class="w-full gold-shimmer-btn py-3.5 rounded-xl font-bold text-obsidian-950 text-xs sm:text-sm uppercase tracking-widest flex items-center justify-center space-x-2 shadow-xl active:scale-98">
-            <svg class="w-4 h-4 text-obsidian-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        <!-- Sticky Action Buttons Area -->
+        <div class="pt-5 border-t border-white/10 space-y-3">
+          
+          <!-- Primary: Automated WhatsApp Booking Button -->
+          <button id="modal-whatsapp-btn" onclick="bookViaWhatsApp()" 
+                  class="w-full whatsapp-btn py-3.5 px-4 rounded-xl font-bold text-white text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center space-x-2.5 shadow-xl active:scale-98 cursor-pointer">
+            <!-- WhatsApp SVG Icon -->
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+              <path d="M12.031 2c-5.508 0-9.986 4.477-9.986 9.984 0 1.76.459 3.479 1.332 4.996L2 22l5.195-1.362a9.927 9.927 0 0 0 4.836 1.258h.004c5.507 0 9.986-4.477 9.986-9.984 0-2.668-1.039-5.176-2.926-7.062A9.925 9.925 0 0 0 12.031 2zm5.828 14.184c-.246.691-1.426 1.328-1.969 1.41-.5.076-1.145.107-3.471-.856-2.502-1.036-4.108-3.568-4.233-3.734-.125-.166-1.004-1.336-1.004-2.547 0-1.211.637-1.809.863-2.055.227-.246.496-.309.66-.309.164 0 .328.002.473.008.152.008.355-.059.555.422.207.496.707 1.723.769 1.848.062.125.104.271.021.438-.082.166-.125.27-.248.416-.123.146-.26.326-.371.438-.125.125-.256.26-.11.512.146.252.648 1.066 1.391 1.727.955.85 1.76 1.113 2.012 1.238.252.125.4.104.547-.066.146-.17.625-.729.791-.98.166-.252.332-.209.557-.125.227.084 1.436.678 1.684.803.248.125.414.188.475.293.062.105.062.609-.184 1.3z"/>
             </svg>
-            <span id="modal-book-cta-text">Book This Exact Style ($95)</span>
+            <span id="modal-whatsapp-cta-text">Book / Query on WhatsApp ($80)</span>
           </button>
+
+          <!-- Secondary Actions Row: Copy Text & In-House Form -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- Copy Inquiry Message Button -->
+            <button id="modal-copy-btn" onclick="copyBookingMessage()" 
+                    class="w-full py-2.5 px-3.5 rounded-xl border border-white/10 hover:border-champagne-500/40 bg-obsidian-950/80 hover:bg-obsidian-950 text-zinc-300 hover:text-champagne-300 text-xs font-medium flex items-center justify-center space-x-2 transition-all active:scale-95 shadow-md">
+              <svg id="copy-btn-icon" class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+              </svg>
+              <span id="copy-btn-text">Copy Inquiry Details</span>
+            </button>
+
+            <!-- Open Reservation Form Drawer -->
+            <button onclick="bookFromModal()" 
+                    class="w-full py-2.5 px-3.5 rounded-xl border border-champagne-500/20 hover:border-champagne-400/60 bg-champagne-500/10 hover:bg-champagne-500/20 text-champagne-300 text-xs font-medium flex items-center justify-center space-x-1.5 transition-all active:scale-95 shadow-md">
+              <svg class="w-4 h-4 text-champagne-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              <span>Schedule Form Visit</span>
+            </button>
+          </div>
+
         </div>
 
       </div>

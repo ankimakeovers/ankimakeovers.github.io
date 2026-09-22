@@ -67,6 +67,9 @@ if (typeof tailwind !== 'undefined') {
    ------------------------------------------------------------------------- */
 const FALLBACK_IMAGE = './assets/images/placeholder.svg';
 
+// Studio WhatsApp Concierge Number (Digits only, including country code, e.g. '15550192834' or '919876543210')
+const WHATSAPP_PHONE = '15550192834';
+
 const CATEGORY_MAP = {
   nails: { label: "Nails & Art", key: "nails" },
   hair: { label: "Hair Styling & Cuts", key: "hair" },
@@ -628,9 +631,9 @@ function toggleAddon(index, price) {
 
 function updateModalPriceDisplay() {
   const priceEl = document.getElementById('modal-calculated-price');
-  const ctaEl = document.getElementById('modal-book-cta-text');
+  const waCtaEl = document.getElementById('modal-whatsapp-cta-text');
   if (priceEl) priceEl.innerText = `$${currentCalculatedTotal}`;
-  if (ctaEl) ctaEl.innerText = `Book This Exact Style ($${currentCalculatedTotal} Total)`;
+  if (waCtaEl) waCtaEl.innerText = `Book / Query on WhatsApp ($${currentCalculatedTotal})`;
 }
 
 function renderAngleThumbnails(item) {
@@ -707,6 +710,101 @@ function bookFromModal() {
   if (!activeModalItem) return;
   closeLookbookModal();
   openBookingDrawer(activeModalItem, currentCalculatedTotal);
+}
+
+/* -------------------------------------------------------------------------
+   6.5 AUTOMATED WHATSAPP BOOKING & CLIPBOARD COPY
+   ------------------------------------------------------------------------- */
+function formatBookingMessage(item) {
+  if (!item) return '';
+  const priceDisplay = currentCalculatedTotal ? `$${currentCalculatedTotal}` : item.price;
+  
+  let msg = `Hi! I'm interested in booking an appointment for this look:\n\n` +
+            `• Style: ${item.title}\n` +
+            `• Code / ID: ${item.id}\n` +
+            `• Category: ${item.categoryLabel}\n` +
+            `• Estimated Price: ${priceDisplay}\n`;
+
+  if (currentSelectedAddons && currentSelectedAddons.size > 0 && item.addons) {
+    const selectedNames = Array.from(currentSelectedAddons)
+      .map(idx => item.addons[idx]?.name)
+      .filter(Boolean);
+    if (selectedNames.length > 0) {
+      msg += `• Customized Add-ons: ${selectedNames.join(', ')}\n`;
+    }
+  }
+
+  msg += `\nCould you please let me know your available slots?`;
+  return msg;
+}
+
+function bookViaWhatsApp() {
+  if (!activeModalItem) return;
+  const message = formatBookingMessage(activeModalItem);
+  const encoded = encodeURIComponent(message);
+  
+  const cleanPhone = (WHATSAPP_PHONE || '').replace(/[^0-9]/g, '');
+  const url = cleanPhone.length > 0 
+    ? `https://wa.me/${cleanPhone}?text=${encoded}`
+    : `https://wa.me/?text=${encoded}`;
+  
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function copyBookingMessage() {
+  if (!activeModalItem) return;
+  const message = formatBookingMessage(activeModalItem);
+  
+  const copyBtnText = document.getElementById('copy-btn-text');
+  const copyBtnIcon = document.getElementById('copy-btn-icon');
+
+  function triggerCopySuccess() {
+    if (copyBtnText) copyBtnText.innerText = 'Copied to Clipboard! ✓';
+    if (copyBtnIcon) {
+      copyBtnIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>`;
+    }
+    
+    // Show Toast
+    const toastTitle = document.getElementById('toast-title');
+    const toastMsg = document.getElementById('toast-message');
+    const toastCode = document.getElementById('toast-code');
+    if (toastTitle) toastTitle.innerText = 'Inquiry Details Copied!';
+    if (toastMsg) toastMsg.innerHTML = 'Message copied to your clipboard. Ready to paste in WhatsApp, Instagram DM, or iMessage.';
+    if (toastCode) toastCode.innerText = activeModalItem.id;
+    showToast();
+
+    setTimeout(() => {
+      if (copyBtnText) copyBtnText.innerText = 'Copy Inquiry Details';
+      if (copyBtnIcon) {
+        copyBtnIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>`;
+      }
+    }, 2500);
+  }
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(message)
+      .then(triggerCopySuccess)
+      .catch(() => fallbackCopy(message, triggerCopySuccess));
+  } else {
+    fallbackCopy(message, triggerCopySuccess);
+  }
+}
+
+function fallbackCopy(text, callback) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    if (typeof callback === 'function') callback();
+  } catch (err) {
+    console.error('Failed to copy text:', err);
+  } finally {
+    document.body.removeChild(textarea);
+  }
 }
 
 /* -------------------------------------------------------------------------

@@ -61,6 +61,19 @@
   transform: translateY(-2px);
 }
 
+/* WhatsApp Action Button Effect */
+.whatsapp-btn {
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  background-size: 200% auto;
+  transition: all 0.35s ease;
+}
+
+.whatsapp-btn:hover {
+  background-position: right center;
+  box-shadow: 0 0 25px rgba(37, 211, 102, 0.45);
+  transform: translateY(-2px);
+}
+
 /* Modal Blurred Backdrop */
 .modal-backdrop {
   backdrop-filter: blur(24px);
