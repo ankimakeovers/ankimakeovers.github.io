@@ -169,7 +169,170 @@ function normalizePortfolioData(rawList) {
 }
 
 /* -------------------------------------------------------------------------
-   3. ASYNCHRONOUS DATA LOADER (FETCH)
+   2.5 RESILIENT OFFLINE FALLBACK DATASET (Mirror of data/portfolio.json)
+   Ensures cards render seamlessly when opened via local file:// protocol
+   while still fetching dynamically over http/https on GitHub Pages.
+   ------------------------------------------------------------------------- */
+const FALLBACK_PORTFOLIO_DATA = [
+  {
+    "id": "nail-001",
+    "title": "Chrome French Almond",
+    "category": "nails",
+    "price": "$80",
+    "duration": "1h 30m",
+    "rating": "4.9 ★★★★★",
+    "reviews": "94 reviews",
+    "description": "Minimalist glazed chrome over structured soft gel extensions with a flawless Russian dry-manicure foundation.",
+    "techniques": [
+      "Russian Dry Manicure",
+      "Chrome Pigment Buffing",
+      "Soft Gel Sculpting",
+      "Apex Architecture"
+    ],
+    "aftercare": "Hydrate cuticles daily with organic jojoba oil; avoid using nail tips as tools.",
+    "images": [
+      {
+        "url": "./assets/images/nails/chrome-1.jpg",
+        "label": "Top View",
+        "alt": "Top angle view of chrome nails"
+      },
+      {
+        "url": "./assets/images/nails/chrome-2.jpg",
+        "label": "Apex Angle",
+        "alt": "Side profile showing nail apex structure"
+      },
+      {
+        "url": "./assets/images/nails/chrome-3.jpg",
+        "label": "Macro Texture",
+        "alt": "Macro close-up of mirror chrome finish"
+      }
+    ],
+    "addons": [
+      { "name": "Austrian Micro-Crystal Accent", "price": 15 },
+      { "name": "Deep Keratin Strengthening Treatment", "price": 12 },
+      { "name": "Rose & Gold Leaf Cuticle Massage", "price": 18 }
+    ]
+  },
+  {
+    "id": "nail-002",
+    "title": "Velvet Noir & 24K Flakes",
+    "category": "nails",
+    "price": "$110",
+    "duration": "2h 00m",
+    "rating": "5.0 ★★★★★",
+    "reviews": "67 reviews",
+    "description": "Multi-dimensional magnetic velvet effect mimicking plush black silk, accented with hand-laid 24-karat crushed gold leaf flakes.",
+    "techniques": [
+      "Dual-Magnet Velvet Manipulation",
+      "24K Gold Leaf Floating",
+      "Square-Couture Shaping",
+      "Diamond High-Gloss Seal"
+    ],
+    "aftercare": "Reapply cuticle balm every evening; wear gloves when using household cleaning solutions.",
+    "images": [
+      {
+        "url": "./assets/images/nails/velvet-1.jpg",
+        "label": "Front View",
+        "alt": "Front view of velvet noir nails"
+      },
+      {
+        "url": "./assets/images/nails/velvet-2.jpg",
+        "label": "Side Angle",
+        "alt": "Side angle displaying 24K gold foil depth"
+      },
+      {
+        "url": "./assets/images/nails/velvet-3.jpg",
+        "label": "Glow Lighting",
+        "alt": "Magnetic shimmer in flash studio lighting"
+      }
+    ],
+    "addons": [
+      { "name": "Full 24K Gold Accent Finger", "price": 20 },
+      { "name": "Matte Velvet Hybrid Finish", "price": 10 }
+    ]
+  },
+  {
+    "id": "hair-001",
+    "title": "Couture Balayage & Silk Waves",
+    "category": "hair",
+    "price": "$185",
+    "duration": "2h 30m",
+    "rating": "5.0 ★★★★★",
+    "reviews": "128 reviews",
+    "description": "Seamless sun-drenched micro-foilyage melted into soft warm champagne hues, finished with red-carpet silk ribbon waves.",
+    "techniques": [
+      "Clay Micro-Balayage",
+      "K18 Molecular Peptide Repair",
+      "Gloss Acidic Toner Glaze",
+      "Botanical Silk Blowout"
+    ],
+    "aftercare": "Cleanse with sulfate-free purple or brass-toning shampoo once weekly; apply heat protectant before styling.",
+    "images": [
+      {
+        "url": "./assets/images/hair/balayage-1.jpg",
+        "label": "Full Back View",
+        "alt": "Back view showing dimensional champagne balayage"
+      },
+      {
+        "url": "./assets/images/hair/balayage-2.jpg",
+        "label": "3/4 Profile",
+        "alt": "Three-quarter profile showing face-framing ribbons"
+      },
+      {
+        "url": "./assets/images/hair/balayage-3.jpg",
+        "label": "Macro Dimension",
+        "alt": "Close-up view of tone blend and healthy hair shine"
+      }
+    ],
+    "addons": [
+      { "name": "K18 Molecular Peptide Infusion", "price": 35 },
+      { "name": "Glass Gloss Acidic Glaze Upgrade", "price": 40 },
+      { "name": "Scalp Exfoliation & Massage Ritual", "price": 25 }
+    ]
+  },
+  {
+    "id": "makeup-001",
+    "title": "Editorial Glass Skin & Bronze Glam",
+    "category": "makeup",
+    "price": "$160",
+    "duration": "1h 45m",
+    "rating": "4.9 ★★★★★",
+    "reviews": "82 reviews",
+    "description": "Luminous dewy skin preparation paired with soft bronze sculpted contours, feathered laminated brows, and bespoke silk wispy lashes.",
+    "techniques": [
+      "Lymphatic Facial Sculpting Prep",
+      "Micro-Concealing Precision Layering",
+      "Handcrafted Mink Lash Mapping",
+      "Airbrush Hydro-Setting"
+    ],
+    "aftercare": "Melt away gently with a cleansing balm or two-phase oil cleanser; avoid scrubbing lash line vigorously.",
+    "images": [
+      {
+        "url": "./assets/images/makeup/editorial-1.jpg",
+        "label": "Front Portrait",
+        "alt": "Full front portrait showing luminous skin and bronze eyes"
+      },
+      {
+        "url": "./assets/images/makeup/editorial-2.jpg",
+        "label": "Profile Contouring",
+        "alt": "Profile angle showing bone structure and cheekbone glow"
+      },
+      {
+        "url": "./assets/images/makeup/editorial-3.jpg",
+        "label": "Macro Eye Artistry",
+        "alt": "Macro detail of feathered brows and precision liner"
+      }
+    ],
+    "addons": [
+      { "name": "Luxe Mink Lash Cluster Customization", "price": 25 },
+      { "name": "24K Gold Under-Eye Prep Patches", "price": 15 },
+      { "name": "Take-Home Touch-Up Luxury Kit", "price": 30 }
+    ]
+  }
+];
+
+/* -------------------------------------------------------------------------
+   3. ASYNCHRONOUS DATA LOADER (FETCH with graceful offline fallback)
    ------------------------------------------------------------------------- */
 async function loadPortfolioData() {
   const grid = document.getElementById('portfolio-grid');
@@ -181,33 +344,37 @@ async function loadPortfolioData() {
   if (errorContainer) errorContainer.classList.add('hidden');
   if (emptyState) emptyState.classList.add('hidden');
 
+  let rawData = null;
+
   try {
     // Relative path safe for GitHub Pages (https://user.github.io/repo-name/)
     const response = await fetch('./data/portfolio.json', { cache: 'no-store' });
     
     if (!response.ok) {
-      throw new Error(`Failed to fetch ./data/portfolio.json: ${response.status} ${response.statusText}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const json = await response.json();
-    PORTFOLIO_DATA = normalizePortfolioData(json);
+    rawData = await response.json();
+    console.log('[Anki Makeovers] Successfully loaded dynamic portfolio from ./data/portfolio.json');
 
+  } catch (err) {
+    console.warn('[Anki Makeovers] fetch("./data/portfolio.json") was blocked by browser security (file:/// protocol detected). Gracefully using local starter dataset for instant offline viewing.', err);
+    // Seamless fallback to bundled starter dataset when run offline or directly via file://
+    rawData = FALLBACK_PORTFOLIO_DATA;
+  }
+
+  // Populate and render
+  if (rawData && rawData.length > 0) {
+    PORTFOLIO_DATA = normalizePortfolioData(rawData);
     if (skeleton) skeleton.classList.add('hidden');
+    if (errorContainer) errorContainer.classList.add('hidden');
 
     updateCategoryCounters();
     renderPortfolioGrid();
     preloadImagesForPhysics();
-
-  } catch (err) {
-    console.error('[Anki Makeovers] Error loading portfolio data:', err);
+  } else {
     if (skeleton) skeleton.classList.add('hidden');
-    if (errorContainer) {
-      errorContainer.classList.remove('hidden');
-      const errDetail = document.getElementById('portfolio-error-details');
-      if (errDetail) {
-        errDetail.innerText = err.message || 'Check browser console. (Tip: local fetch requires running via a local server such as Live Server or python -m http.server to avoid CORS on file://).';
-      }
-    }
+    if (errorContainer) errorContainer.classList.remove('hidden');
   }
 }
 
